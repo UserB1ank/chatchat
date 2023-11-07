@@ -56,10 +56,10 @@ public class Story {
 
     private String content;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String img;
     private int like;
     private LocalDate create_date;
-
     private String owner;
 }

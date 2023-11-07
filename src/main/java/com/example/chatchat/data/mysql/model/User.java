@@ -6,7 +6,6 @@ import jakarta.persistence.OneToMany;
 
 import java.time.LocalDate;
 import java.util.Set;
-
 @Entity
 public class User {
     @Id
