@@ -17,6 +17,7 @@ public class UserNeo4j {
 
     @Id
     private String account;
+    // TODO 询问是否需要这么多关系
 
     /**
      * 好友关系
