@@ -46,4 +46,5 @@ public class FriendController {
     public SaResult deleteFriend(@RequestParam String Account) {
         return userService.deleteFriend(Account);
     }
+
 }

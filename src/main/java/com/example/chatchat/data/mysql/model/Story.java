@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Story {
+
+    // TODO 图片上传问题
     public Story(String content, String img, String owner) {
         this.content = content;
         this.img = img;
