@@ -217,6 +217,22 @@ public class UserNeo4j {
         return false;
     }
 
+    /**
+     * 判断好友列表是否为空
+     *
+     * @param
+     */
+    public boolean isFriendListEmpty() {
+        if (friends == null) {
+            friends = new HashSet<>();
+        }
+        return friends.isEmpty();
+    }
+
+    /**
+     * 删除好友
+     * @param friend
+     */
     public void removeFriend(UserNeo4j friend) {
         if (friends == null) {
             friends = new HashSet<>();

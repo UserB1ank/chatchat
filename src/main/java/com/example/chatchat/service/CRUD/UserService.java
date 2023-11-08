@@ -4,6 +4,7 @@ import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 
+import com.example.chatchat.data.Friend;
 import com.example.chatchat.data.mysql.model.User;
 import com.example.chatchat.data.mysql.repository.UserRepository;
 import com.example.chatchat.data.neo4j.model.UserNeo4j;
@@ -15,8 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.swing.plaf.PanelUI;
 import java.time.LocalDate;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -75,6 +75,7 @@ public class UserService {
 
     /**
      * 获取所有好友申请
+     *
      * @return
      */
     public Set<UserNeo4j> getApply() {
@@ -85,6 +86,7 @@ public class UserService {
 
     /**
      * 申请
+     *
      * @param friendAccount
      * @return
      */
@@ -168,5 +170,22 @@ public class UserService {
         return SaResult.ok();
     }
 
+    /**
+     * 获取好友列表
+     */
+    public Set<Friend> getFriends() {
+        String account = StpUtil.getSession().get("account").toString();
+        UserNeo4j user = userRepositoryNeo4j.findByAccount(account);
+        if (user.isFriendListEmpty()) {
+            return null;
+        }
+        Set<Friend> friends = new HashSet<>();
+        for (UserNeo4j friend : user.getFriends()) {
+            User friendUser = userRepositoryMysql.findByAccount(friend.getAccount());
+            Friend data = new Friend(friendUser.getAccount(), friendUser.getNickname(), friendUser.getAvatar(), friendUser.getMotto());
+            friends.add(data);
+        }
+        return friends;
+    }
 
 }

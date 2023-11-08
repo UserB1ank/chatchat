@@ -1,6 +1,7 @@
 package com.example.chatchat.controller;
 
 import cn.dev33.satoken.util.SaResult;
+import com.example.chatchat.data.Friend;
 import com.example.chatchat.data.neo4j.model.UserNeo4j;
 import com.example.chatchat.service.CRUD.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,11 @@ public class FriendController {
     @RequestMapping("/deleteFriend")
     public SaResult deleteFriend(@RequestParam String Account) {
         return userService.deleteFriend(Account);
+    }
+
+    @RequestMapping("/friendList")
+    public Set<Friend> getFriends() {
+        return userService.getFriends();
     }
 
 }

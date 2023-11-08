@@ -27,6 +27,27 @@ public class Friend {
         this.motto = motto;
     }
 
+    public Friend() {
+    }
+
+    public Friend(String account,String nickname, String avatar, String motto) {
+        this.nickname = nickname;
+        this.avatar = avatar;
+        this.motto = motto;
+        this.account = account;
+    }
+
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    private String account;
+
     private String nickname;
     private String avatar;
     private String motto;
