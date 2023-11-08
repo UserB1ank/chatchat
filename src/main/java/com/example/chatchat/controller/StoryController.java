@@ -16,6 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/story")
 public class StoryController {
+
     @Autowired
     private StoryService storyService;
 
@@ -29,8 +30,31 @@ public class StoryController {
         return storyService.deleteStory(id);
     }
 
-    @RequestMapping("/userstory")
+    @RequestMapping("/userStory")
     public List<Story> getUserStories() {
         return storyService.getUserStories();
     }
+
+    // TODO 如何限定获取的动态的数量
+    // TODO 动态的排序，热度，时间
+
+    /**
+     * 依照用户指定的方式去查询动态
+     *
+     * @RequestMapping("/getAllStory")
+     * @List
+     */
+
+    public enum sortType {
+        LIKES,
+        DATE
+    }
+    @RequestMapping("/getAllStory")
+    public List<Story> getAllStory(@RequestParam sortType type) {
+        // 根据type参数获取对应的故事列表
+        return null;
+
+    }
+
+
 }

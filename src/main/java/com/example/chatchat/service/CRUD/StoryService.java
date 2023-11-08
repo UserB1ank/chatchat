@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -76,5 +77,28 @@ public class StoryService {
             e.printStackTrace();
             return SaResult.error("删除失败");
         }
+    }
+
+    // Todo 几种不同的获取动态的方式
+    // Todo 动态获取后，由谁发布的动态，这个信息如何获取并传递到前端
+    public Set<Story> getFriendStories() {
+        UserNeo4j owner = userRepositoryNeo4j.findByAccount(StpUtil.getSession().get("account").toString());
+        Set<Story> storyList = new HashSet<>();
+        for (UserNeo4j friend : owner.getFriends()) {
+            for (StoryNeo4j Story : friend.getStories()) {
+                Story story = storyRepositoryMysql.getReferenceById(Story.getId());
+                storyList.add(story);
+            }
+        }
+        return storyList;
+    }
+
+    // Todo 一次性获取多少条动态？如何在某个标记处之后继续获取动态
+    public Set<Story> getLikesStory() {
+        Set<Story> storyList = new HashSet<>();
+        for (Story story : storyRepositoryMysql.findAll()) {
+            storyList.add(storyRepositoryMysql.getReferenceById(story.getId()));
+        }
+        return storyList;
     }
 }
