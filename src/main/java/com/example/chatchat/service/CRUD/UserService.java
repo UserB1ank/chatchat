@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -22,7 +23,7 @@ public class UserService {
     public UserRepository userRepositoryMysql;
     @Autowired
     public UserRepositoryNeo4j userRepositoryNeo4j;
-    // TODO 好友申请与通过
+
     private String account;
 
     public UserService() {
@@ -70,6 +71,20 @@ public class UserService {
         return SaResult.error("原密码错误");
     }
 
+
+    /**
+     * @return 好友申请
+     */
+    public Set<UserNeo4j> getApply() {
+        String account = StpUtil.getSession().get("account").toString();
+        UserNeo4j user = userRepositoryNeo4j.findByAccount(account);
+        return user.getApplyList();
+    }
+
+    /**
+     * @param friendAccount
+     * @return
+     */
     public SaResult applyToFriend(String friendAccount) {
         if (!userRepositoryNeo4j.existsByAccount(friendAccount))
             return SaResult.error("申请目标不存在");
@@ -87,4 +102,6 @@ public class UserService {
         userRepositoryNeo4j.save(friend);
         return SaResult.ok();
     }
+
+
 }

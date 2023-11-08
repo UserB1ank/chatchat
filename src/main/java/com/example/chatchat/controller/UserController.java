@@ -2,6 +2,7 @@ package com.example.chatchat.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
+import com.example.chatchat.data.neo4j.model.UserNeo4j;
 import com.example.chatchat.service.CRUD.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/user")
@@ -37,6 +40,15 @@ public class UserController {
         return userService.applyToFriend(friendAccount);
     }
 
+    @RequestMapping("/applylist")
+    public Set<String> geApplyList() {
+        Set<UserNeo4j> applyList = userService.getApply();
+        Set<String> applyAccountList = new HashSet<>();
+        for (UserNeo4j user : applyList) {
+            applyAccountList.add(user.getAccount());
+        }
+        return applyAccountList;
+    }
 
     @RequestMapping("/test")
     public String test() {

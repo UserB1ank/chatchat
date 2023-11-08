@@ -36,7 +36,6 @@ public class UserNeo4j {
     }
 
 
-
     /**
      * 获取用户发布的所有Story
      *
@@ -169,6 +168,24 @@ public class UserNeo4j {
         return false;
     }
 
+    public void removeApply(UserNeo4j user) {
+        if (applies == null) {
+            applies = new HashSet<>();
+        }
+        for (UserNeo4j apply : applies) {
+            if (apply.getAccount().equals(user.getAccount())) {
+                applies.remove(apply);
+                return;
+            }
+        }
+    }
+
+    public Set<UserNeo4j> getApplyList() {
+        return applies;
+    }
+
+    //-------------------------------------------
+
     @Relationship(type = "FRIENDS")
     private Set<UserNeo4j> friends;
 
@@ -195,6 +212,7 @@ public class UserNeo4j {
 
     /**
      * 判断好友是否存在
+     *
      * @param account 好友的账号
      * @return 如果好友存在返回true，否则返回false
      */
@@ -221,4 +239,5 @@ public class UserNeo4j {
             }
         }
     }
+
 }
