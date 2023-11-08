@@ -5,6 +5,7 @@ import cn.dev33.satoken.util.SaResult;
 import com.example.chatchat.data.mysql.model.Story;
 import com.example.chatchat.data.mysql.repository.StoryRepository;
 import com.example.chatchat.data.neo4j.model.StoryNeo4j;
+import com.example.chatchat.data.neo4j.model.UserNeo4j;
 import com.example.chatchat.data.neo4j.repository.StoryRepositoryNeo4j;
 import com.example.chatchat.data.neo4j.repository.UserRepositoryNeo4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +29,14 @@ public class StoryService {
             StoryNeo4j newBeeNeo4j = new StoryNeo4j(id);
             storyRepositoryNeo4j.save(newBeeNeo4j);
             //建立关系
-            userRepositoryNeo4j.addStory(StpUtil.getSession().get("account").toString(), id);
-
+            UserNeo4j owner = userRepositoryNeo4j.findByAccount(StpUtil.getSession().get("account").toString());
+            owner.addStory(newBeeNeo4j);
+            userRepositoryNeo4j.save(owner);
 
             return SaResult.ok("添加成功");
         } catch (Exception e) {
             // TODO 添加失败，回滚数据，删除node，删除mysql记录
+            e.printStackTrace();
             return SaResult.error("添加失败");
         }
     }
