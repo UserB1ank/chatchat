@@ -2,6 +2,9 @@ package com.example.chatchat.data;
 
 import com.example.chatchat.data.mysql.model.User;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 public class Friend {
     public String getNickname() {
         return nickname;
@@ -30,11 +33,12 @@ public class Friend {
     public Friend() {
     }
 
-    public Friend(String account,String nickname, String avatar, String motto) {
+    public Friend(String account, String nickname, String avatar, String motto, LocalDate birthday) {
         this.nickname = nickname;
         this.avatar = avatar;
         this.motto = motto;
         this.account = account;
+        this.birthday = birthday;
     }
 
 
@@ -51,5 +55,15 @@ public class Friend {
     private String nickname;
     private String avatar;
     private String motto;
+
+    public LocalDate getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(LocalDate birthday) {
+        this.birthday = birthday;
+    }
+
+    private LocalDate birthday;
 
 }

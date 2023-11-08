@@ -61,7 +61,7 @@ public class UserService {
         return SaResult.ok();
     }
 
-    public SaResult changePassword(@RequestParam String oldPassword, @RequestParam String newPassword) {
+    public SaResult changePassword(String oldPassword, String newPassword) {
         String account = StpUtil.getSession().get("account").toString();
         User user = userRepositoryMysql.findByAccount(account);
         if (user.getPassword().equals(oldPassword)) {
@@ -72,6 +72,31 @@ public class UserService {
         return SaResult.error("原密码错误");
     }
 
+    /**
+     * 修改用户信息
+     */
+    public SaResult updateInfo(String nickname, String motto,
+                               String avatar, String birthday) {
+        String account = StpUtil.getSession().get("account").toString();
+        User user = userRepositoryMysql.findByAccount(account);
+        // Todo 这里有很大的优化空间
+        user.setNickname(nickname.isEmpty() ? user.getNickname() : nickname);
+        user.setMotto(motto.isEmpty() ? user.getMotto() : motto);
+        user.setAvatar(avatar.isEmpty() ? user.getAvatar() : avatar);
+        user.setBirthday(birthday.isEmpty() ? user.getBirthday() : LocalDate.parse(birthday));
+        userRepositoryMysql.save(user);
+        return SaResult.ok();
+    }
+
+    /**
+     * 获取当前用户信息
+     */
+    public User getUserInfo() {
+        String account = StpUtil.getSession().get("account").toString();
+        User user = userRepositoryMysql.findByAccount(account);
+        user.setPassword(null);
+        return user;
+    }
 
     /**
      * 获取所有好友申请
@@ -182,7 +207,7 @@ public class UserService {
         Set<Friend> friends = new HashSet<>();
         for (UserNeo4j friend : user.getFriends()) {
             User friendUser = userRepositoryMysql.findByAccount(friend.getAccount());
-            Friend data = new Friend(friendUser.getAccount(), friendUser.getNickname(), friendUser.getAvatar(), friendUser.getMotto());
+            Friend data = new Friend(friendUser.getAccount(), friendUser.getNickname(), friendUser.getAvatar(), friendUser.getMotto(), friendUser.getBirthday());
             friends.add(data);
         }
         return friends;

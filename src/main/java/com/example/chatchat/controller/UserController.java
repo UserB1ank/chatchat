@@ -2,6 +2,7 @@ package com.example.chatchat.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
+import com.example.chatchat.data.mysql.model.User;
 import com.example.chatchat.data.neo4j.model.UserNeo4j;
 import com.example.chatchat.service.CRUD.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,16 @@ public class UserController {
     @RequestMapping("/changePassword")
     public SaResult changePassword(@RequestParam String oldPassword, @RequestParam String newPassword) {
         return userService.changePassword(oldPassword, newPassword);
+    }
+
+    @RequestMapping("/updateInfo")
+    public SaResult updateInfo(@RequestParam String nickname, @RequestParam String motto, @RequestParam String avatar, @RequestParam String birthday) {
+        return userService.updateInfo(nickname, motto, avatar, birthday);
+    }
+
+    @RequestMapping("/getUserInfo")
+    public User getUserInfo() {
+        return userService.getUserInfo();
     }
 
     @RequestMapping("/test")
