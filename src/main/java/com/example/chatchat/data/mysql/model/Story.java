@@ -1,10 +1,12 @@
 package com.example.chatchat.data.mysql.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Story {
     public Story(String content, String img, String owner) {
         this.content = content;

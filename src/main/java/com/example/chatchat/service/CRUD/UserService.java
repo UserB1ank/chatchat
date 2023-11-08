@@ -70,8 +70,21 @@ public class UserService {
         return SaResult.error("原密码错误");
     }
 
-//    public List<Story> getUserStory() {
-//        String account = StpUtil.getSession().get("account").toString();
-//
-//    }
+    public SaResult applyToFriend(String friendAccount) {
+        if (!userRepositoryNeo4j.existsByAccount(friendAccount))
+            return SaResult.error("申请目标不存在");
+        String account = StpUtil.getSession().get("account").toString();
+        UserNeo4j user = userRepositoryNeo4j.findByAccount(account);
+        UserNeo4j friend = userRepositoryNeo4j.findByAccount(friendAccount);
+
+        if (friend.getAccount().equals(account)) {
+            return SaResult.error("不能申请自己为好友");
+        }
+        if (friend.isApplyExist(account)) {
+            return SaResult.error("已申请过该好友");
+        }
+        friend.addApply(user);
+        userRepositoryNeo4j.save(friend);
+        return SaResult.ok();
+    }
 }

@@ -8,6 +8,4 @@ import org.springframework.data.neo4j.repository.query.Query;
 public interface UserRepositoryNeo4j extends Neo4jRepository<UserNeo4j, String> {
     UserNeo4j findByAccount(String username);
     boolean existsByAccount(String username);
-//    @Query("MATCH (u:UserNeo4j),(S:StoryNeo4j) WHERE u.account = $account and S.id=$id CREATE (u)-[r:USER_STORY]->(S) return r")
-//    Relationship addStory(String account, Integer id);
 }

@@ -6,6 +6,7 @@ import com.example.chatchat.service.CRUD.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.text.DateFormat;
@@ -30,6 +31,12 @@ public class UserController {
     public SaResult register(@RequestParam String username, @RequestParam String password, @RequestParam String nickname, @RequestParam String birthday) {
         return userService.register(username, password, nickname, LocalDate.parse(birthday));
     }
+
+    @RequestMapping("/apply")
+    public SaResult applyToFriend(@RequestParam String friendAccount) {
+        return userService.applyToFriend(friendAccount);
+    }
+
 
     @RequestMapping("/test")
     public String test() {
