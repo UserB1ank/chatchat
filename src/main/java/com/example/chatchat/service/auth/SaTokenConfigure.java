@@ -17,7 +17,6 @@ public class SaTokenConfigure implements WebMvcConfigurer {
                 .excludePathPatterns("/user/login");
         // TODO 区别认证路由
         // TODO 异常差分处理
-        // TODO 利用redis分布式存储会话
     }
 }
 

@@ -26,6 +26,14 @@ public class UserNeo4j {
      * 喜欢哪些Story
      * 喜欢哪些Comment
      */
+
+    public UserNeo4j() {
+    }
+
+    public UserNeo4j(String account) {
+        this.account = account;
+    }
+
     @Relationship(type = "FRIENDS")
     private Set<UserNeo4j> friends;
 
@@ -68,6 +76,7 @@ public class UserNeo4j {
 
     @Relationship(type = "LIKE_COMMENT")
     private Set<CommentNeo4j> likeComments;
+
     public void addLikeComment(CommentNeo4j comment) {
         if (likeComments == null) {
             likeComments = new HashSet<>();

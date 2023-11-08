@@ -9,4 +9,8 @@ public interface UserRepository extends JpaRepository<User, String> {
     //User类的主键是account
 
     boolean existsByAccountAndPassword(String Account, String Password);
+
+    boolean existsByAccount(String username);
+
+    User findByAccount(String account);
 }

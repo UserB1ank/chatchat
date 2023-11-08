@@ -2,10 +2,21 @@ package com.example.chatchat.data.mysql.model;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 public class Story {
+    public Story(String content, String img, String owner) {
+        this.content = content;
+        this.img = img;
+        this.likes = 0;
+        this.create_date = LocalDateTime.now();
+        this.owner = owner;
+    }
+
+    public Story() {
+    }
+
     public String getContent() {
         return content;
     }
@@ -14,11 +25,11 @@ public class Story {
         this.content = content;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -30,19 +41,19 @@ public class Story {
         this.img = img;
     }
 
-    public int getLike() {
-        return like;
+    public int getLikes() {
+        return likes;
     }
 
-    public void setLike(int like) {
-        this.like = like;
+    public void setLikes(int like) {
+        this.likes = like;
     }
 
-    public LocalDate getCreate_date() {
+    public LocalDateTime getCreate_date() {
         return create_date;
     }
 
-    public void setCreate_date(LocalDate create_date) {
+    public void setCreate_date(LocalDateTime create_date) {
         this.create_date = create_date;
     }
 
@@ -57,9 +68,9 @@ public class Story {
     private String content;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private String img;
-    private int like;
-    private LocalDate create_date;
+    private int likes;
+    private LocalDateTime create_date;
     private String owner;
 }

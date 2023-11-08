@@ -4,11 +4,16 @@ import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 
+import com.example.chatchat.data.mysql.model.User;
 import com.example.chatchat.data.mysql.repository.UserRepository;
+import com.example.chatchat.data.neo4j.model.UserNeo4j;
 import com.example.chatchat.data.neo4j.repository.UserRepositoryNeo4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Service
@@ -17,7 +22,7 @@ public class UserService {
     public UserRepository userRepositoryMysql;
     @Autowired
     public UserRepositoryNeo4j userRepositoryNeo4j;
-
+    // TODO 好友申请与通过
     private String account;
 
     public UserService() {
@@ -41,6 +46,28 @@ public class UserService {
         String token = StpUtil.getTokenValue();
         StpUtil.logoutByTokenValue(token);
         return SaResult.error("账号或密码错误");
+    }
+
+    public SaResult register(String username, String password, String nickname, LocalDate birthday) {
+        if (userRepositoryMysql.existsByAccount(username) && userRepositoryNeo4j.existsByAccount(username)) {
+            return SaResult.error("账号已存在");
+        }
+        User newBee = new User(username, password, nickname, birthday);
+        userRepositoryMysql.save(newBee);
+        UserNeo4j newBeeNeo4j = new UserNeo4j(username);
+        userRepositoryNeo4j.save(newBeeNeo4j);
+        return SaResult.ok();
+    }
+
+    public SaResult changePassword(@RequestParam String oldPassword, @RequestParam String newPassword) {
+        String account = StpUtil.getSession().get("account").toString();
+        User user = userRepositoryMysql.findByAccount(account);
+        if (user.getPassword().equals(oldPassword)) {
+            user.setPassword(newPassword);
+            userRepositoryMysql.save(user);
+            return SaResult.ok();
+        }
+        return SaResult.error("原密码错误");
     }
 
 //    public List<Story> getUserStory() {

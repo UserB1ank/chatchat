@@ -1,21 +1,33 @@
 package com.example.chatchat.data.mysql.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Set;
+
 @Entity
 public class User {
     @Id
     private String account;
     private String password;
     private String nickname;
-    private LocalDate create_date;
+    private LocalDateTime create_date;
     private LocalDate birthday;
     private String motto;
 
+    public User() {
+    }
+
+    public User(String account, String password, String nickname, LocalDate birthday) {
+        this.account = account;
+        this.password = password;
+        this.nickname = nickname;
+        this.birthday = birthday;
+        this.create_date = LocalDateTime.now();
+    }
 
 
     public String getAccount() {
@@ -42,11 +54,11 @@ public class User {
         this.nickname = nickname;
     }
 
-    public LocalDate getCreate_date() {
+    public LocalDateTime getCreate_date() {
         return create_date;
     }
 
-    public void setCreate_date(LocalDate create_date) {
+    public void setCreate_date(LocalDateTime create_date) {
         this.create_date = create_date;
     }
 

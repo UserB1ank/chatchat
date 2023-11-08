@@ -7,16 +7,22 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class StoryNeo4j {
-    public int getId() {
+    public StoryNeo4j() {
+    }
+    public StoryNeo4j(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
     @Id
-    private int id;
+    private Integer id;
 
     //回复
     /**
