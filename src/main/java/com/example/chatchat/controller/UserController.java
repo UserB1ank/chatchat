@@ -35,31 +35,10 @@ public class UserController {
         return userService.register(username, password, nickname, LocalDate.parse(birthday));
     }
 
-    @RequestMapping("/apply")
-    public SaResult applyToFriend(@RequestParam String Account) {
-        return userService.applyToFriend(Account);
+    @RequestMapping("/changePassword")
+    public SaResult changePassword(@RequestParam String oldPassword, @RequestParam String newPassword) {
+        return userService.changePassword(oldPassword, newPassword);
     }
-
-    @RequestMapping("/applyList")
-    public Set<String> geApplyList() {
-        Set<UserNeo4j> applyList = userService.getApply();
-        Set<String> applyAccountList = new HashSet<>();
-        for (UserNeo4j user : applyList) {
-            applyAccountList.add(user.getAccount());
-        }
-        return applyAccountList;
-    }
-
-    @RequestMapping("/refuseApply")
-    public SaResult refuseApply(@RequestParam String Account) {
-        return userService.refuseApply(Account);
-    }
-
-    @RequestMapping("/agreeApply")
-    public SaResult agreeApply(@RequestParam String Account) {
-        return userService.agreeApply(Account);
-    }
-
 
     @RequestMapping("/test")
     public String test() {
