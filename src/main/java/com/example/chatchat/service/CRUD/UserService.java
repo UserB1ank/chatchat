@@ -103,5 +103,22 @@ public class UserService {
         return SaResult.ok();
     }
 
+    /**
+     * 拒绝好友申请
+     */
+    public SaResult refuseApply(String account) {
+        UserNeo4j user = userRepositoryNeo4j.findByAccount(StpUtil.getSession().get("account").toString());
+        if (!user.isApplyExist(account)) {
+            return SaResult.error("申请不存在");
+        }
+        if (user.isFriendExist(account)) {
+            return SaResult.error("已是好友");
+        }
+        user.refuseApply(account);
+        //需要删除持久化的实例后再添加，以达到修改的目的
+        userRepositoryNeo4j.delete(user);
+        userRepositoryNeo4j.save(user);
+        return SaResult.ok();
+    }
 
 }

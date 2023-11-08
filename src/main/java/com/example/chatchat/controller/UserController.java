@@ -36,11 +36,11 @@ public class UserController {
     }
 
     @RequestMapping("/apply")
-    public SaResult applyToFriend(@RequestParam String friendAccount) {
-        return userService.applyToFriend(friendAccount);
+    public SaResult applyToFriend(@RequestParam String Account) {
+        return userService.applyToFriend(Account);
     }
 
-    @RequestMapping("/applylist")
+    @RequestMapping("/applyList")
     public Set<String> geApplyList() {
         Set<UserNeo4j> applyList = userService.getApply();
         Set<String> applyAccountList = new HashSet<>();
@@ -48,6 +48,11 @@ public class UserController {
             applyAccountList.add(user.getAccount());
         }
         return applyAccountList;
+    }
+
+    @RequestMapping("/refuseApply")
+    public SaResult refuseApply(@RequestParam String Account) {
+        return userService.refuseApply(Account);
     }
 
     @RequestMapping("/test")

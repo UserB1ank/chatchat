@@ -144,16 +144,16 @@ public class UserNeo4j {
      *
      * @param account 要拒绝的好友账号
      */
-    public void refuseApply(String account) {
+    public boolean refuseApply(String account) {
         if (applies == null) {
             applies = new HashSet<>();
         }
         for (UserNeo4j user : applies) {
             if (user.getAccount().equals(account)) {
-                applies.remove(user);
-                return;
+                return applies.remove(user);
             }
         }
+        return false;
     }
 
     public boolean isApplyExist(String account) {
@@ -168,17 +168,6 @@ public class UserNeo4j {
         return false;
     }
 
-    public void removeApply(UserNeo4j user) {
-        if (applies == null) {
-            applies = new HashSet<>();
-        }
-        for (UserNeo4j apply : applies) {
-            if (apply.getAccount().equals(user.getAccount())) {
-                applies.remove(apply);
-                return;
-            }
-        }
-    }
 
     public Set<UserNeo4j> getApplyList() {
         return applies;
