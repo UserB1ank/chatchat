@@ -55,6 +55,12 @@ public class UserController {
         return userService.refuseApply(Account);
     }
 
+    @RequestMapping("/agreeApply")
+    public SaResult agreeApply(@RequestParam String Account) {
+        return userService.agreeApply(Account);
+    }
+
+
     @RequestMapping("/test")
     public String test() {
         LocalDateTime currentTime = LocalDateTime.now();

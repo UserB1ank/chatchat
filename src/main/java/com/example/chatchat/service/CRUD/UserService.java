@@ -73,7 +73,8 @@ public class UserService {
 
 
     /**
-     * @return 好友申请
+     * 获取所有好友申请
+     * @return
      */
     public Set<UserNeo4j> getApply() {
         String account = StpUtil.getSession().get("account").toString();
@@ -82,6 +83,7 @@ public class UserService {
     }
 
     /**
+     * 申请
      * @param friendAccount
      * @return
      */
@@ -114,9 +116,53 @@ public class UserService {
         if (user.isFriendExist(account)) {
             return SaResult.error("已是好友");
         }
-        user.refuseApply(account);
+        user.removeApply(account);
         //需要删除持久化的实例后再添加，以达到修改的目的
         userRepositoryNeo4j.delete(user);
+        userRepositoryNeo4j.save(user);
+        return SaResult.ok();
+    }
+
+    /**
+     * 同意好友申请
+     */
+    public SaResult agreeApply(String account) {
+        UserNeo4j user = userRepositoryNeo4j.findByAccount(StpUtil.getSession().get("account").toString());
+        if (!user.isApplyExist(account)) {
+            return SaResult.error("申请不存在");
+        }
+        if (user.isFriendExist(account)) {
+            return SaResult.error("已是好友");
+        }
+        //获取好友的实例
+        UserNeo4j friend = userRepositoryNeo4j.findByAccount(account);
+        //删除请求
+        user.removeApply(account);
+        userRepositoryNeo4j.delete(user);
+        //相互添加好友
+        user.addFriend(friend);
+        friend.addFriend(user);
+        userRepositoryNeo4j.save(user);
+        userRepositoryNeo4j.save(friend);
+
+        return SaResult.ok();
+    }
+
+    /**
+     * 删除好友
+     */
+
+    public SaResult deleteFriend(String account) {
+        UserNeo4j user = userRepositoryNeo4j.findByAccount(StpUtil.getSession().get("account").toString());
+        if (!user.isFriendExist(account)) {
+            return SaResult.error("好友不存在");
+        }
+        UserNeo4j friend = userRepositoryNeo4j.findByAccount(account);
+        user.removeFriend(friend);
+        friend.removeFriend(user);
+        userRepositoryNeo4j.delete(friend);
+        userRepositoryNeo4j.delete(user);
+        userRepositoryNeo4j.save(friend);
         userRepositoryNeo4j.save(user);
         return SaResult.ok();
     }

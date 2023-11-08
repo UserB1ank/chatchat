@@ -144,7 +144,7 @@ public class UserNeo4j {
      *
      * @param account 要拒绝的好友账号
      */
-    public boolean refuseApply(String account) {
+    public boolean removeApply(String account) {
         if (applies == null) {
             applies = new HashSet<>();
         }
