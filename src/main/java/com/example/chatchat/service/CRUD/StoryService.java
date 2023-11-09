@@ -9,6 +9,7 @@ import com.example.chatchat.data.neo4j.model.UserNeo4j;
 import com.example.chatchat.data.neo4j.repository.StoryRepositoryNeo4j;
 import com.example.chatchat.data.neo4j.repository.UserRepositoryNeo4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -25,13 +26,14 @@ public class StoryService {
     @Autowired
     private UserRepositoryNeo4j userRepositoryNeo4j;
 
-    public List<Story> getUserStories() {
-        UserNeo4j owner = userRepositoryNeo4j.findByAccount(StpUtil.getSession().get("account").toString());
-        List<Story> storyList = new ArrayList<>();
-        for (StoryNeo4j story : owner.getStories()) {
-            storyList.add(storyRepositoryMysql.getReferenceById(story.getId()));
-        }
-        return storyList;
+
+    // TODO 分页查询
+    public Set<Story> getUserStories(Integer index) {
+        String account = StpUtil.getSession().get("account").toString();
+//        PageRequest pageRequest = PageRequest.of(index < 0 ? 0 : --index, 10);
+
+        PageRequest pageRequest = PageRequest.of(index <= 0 ? 0 : --index, 10);
+        return storyRepositoryMysql.findAllByOwner(account, pageRequest);
     }
 
     public SaResult addStory(String content, String img) {
@@ -93,7 +95,6 @@ public class StoryService {
         return storyList;
     }
 
-    // Todo 一次性获取多少条动态？如何在某个标记处之后继续获取动态
     public Set<Story> getLikesStory() {
         Set<Story> storyList = new HashSet<>();
         for (Story story : storyRepositoryMysql.findAll()) {

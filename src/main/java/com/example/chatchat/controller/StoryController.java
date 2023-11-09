@@ -5,13 +5,16 @@ import com.example.chatchat.data.mysql.model.Story;
 import com.example.chatchat.service.CRUD.StoryService;
 import com.example.chatchat.service.CRUD.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.neo4j.core.schema.Relationship;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.awt.print.Pageable;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/story")
@@ -31,11 +34,11 @@ public class StoryController {
     }
 
     @RequestMapping("/userStory")
-    public List<Story> getUserStories() {
-        return storyService.getUserStories();
+    //Todo 让前端传入一个index值
+    public Set<Story> getUserStories(@RequestParam Integer index) {
+        return storyService.getUserStories(index);
     }
 
-    // TODO 如何限定获取的动态的数量
     // TODO 动态的排序，热度，时间
 
     /**
@@ -49,6 +52,7 @@ public class StoryController {
         LIKES,
         DATE
     }
+
     @RequestMapping("/getAllStory")
     public List<Story> getAllStory(@RequestParam sortType type) {
         // 根据type参数获取对应的故事列表
