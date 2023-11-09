@@ -14,7 +14,7 @@ public class Story {
         this.content = content;
         this.img = img;
         this.likes = 0;
-        this.create_date = LocalDateTime.now();
+        this.createDate = LocalDateTime.now();
         this.owner = owner;
     }
 
@@ -53,12 +53,12 @@ public class Story {
         this.likes = like;
     }
 
-    public LocalDateTime getCreate_date() {
-        return create_date;
+    public LocalDateTime getCreateDate() {
+        return createDate;
     }
 
-    public void setCreate_date(LocalDateTime create_date) {
-        this.create_date = create_date;
+    public void setCreateDate(LocalDateTime create_date) {
+        this.createDate = create_date;
     }
 
     public String getOwner() {
@@ -75,6 +75,6 @@ public class Story {
     private Integer id;
     private String img;
     private int likes;
-    private LocalDateTime create_date;
+    private LocalDateTime createDate;
     private String owner;
 }

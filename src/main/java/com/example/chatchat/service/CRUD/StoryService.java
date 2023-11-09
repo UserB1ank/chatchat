@@ -110,10 +110,6 @@ public class StoryService {
     public List<Story> getLikesStory(Integer index, sortType type) {
 
         PageRequest pageRequest = PageRequest.of(index <= 0 ? 0 : --index, 10);
-        //TODO 没想到'_'存在解析问题，先单独加个判断去解决
-        if (type.toString().equals("createDate")) {
-            return storyRepositoryMysql.findAllSortedBy(Sort.by(Sort.Direction.DESC, "create_date"), pageRequest);
-        }
         return storyRepositoryMysql.findAllSortedBy(Sort.by(Sort.Direction.DESC, type.toString()), pageRequest);
     }
 

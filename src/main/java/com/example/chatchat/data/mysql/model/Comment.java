@@ -15,7 +15,7 @@ public class Comment {
     public Comment(int id, String owner, String content) {
         this.content = content;
         this.likes = 0;
-        this.create_date = LocalDateTime.now();
+        this.createDate = LocalDateTime.now();
         this.id = id;
         this.owner = owner;
     }
@@ -37,12 +37,12 @@ public class Comment {
         this.likes = like;
     }
 
-    public LocalDateTime getCreate_date() {
-        return create_date;
+    public LocalDateTime getCreateDate() {
+        return createDate;
     }
 
-    public void setCreate_date(LocalDateTime create_date) {
-        this.create_date = create_date;
+    public void setCreateDate(LocalDateTime create_date) {
+        this.createDate = create_date;
     }
 
     public int getId() {
@@ -55,7 +55,7 @@ public class Comment {
 
     private String content;
     private int likes;
-    private LocalDateTime create_date;
+    private LocalDateTime createDate;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
