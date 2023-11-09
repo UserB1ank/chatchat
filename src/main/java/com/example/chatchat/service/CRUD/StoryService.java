@@ -35,7 +35,6 @@ public class StoryService {
         return storyRepositoryMysql.findAllByOwner(account, pageRequest);
     }
 
-    //ToDo neo4j的关系"UserStory"添加似乎多余了
     public SaResult addStory(String content, String img) {
         try {
             //增加mysql记录与neo4j节点
@@ -48,7 +47,6 @@ public class StoryService {
             UserNeo4j owner = userRepositoryNeo4j.findByAccount(StpUtil.getSession().get("account").toString());
             owner.addStory(newBeeNeo4j);
             userRepositoryNeo4j.save(owner);
-
             return SaResult.ok("添加成功");
         } catch (Exception e) {
             // TODO 添加失败，回滚数据，删除node，删除mysql记录

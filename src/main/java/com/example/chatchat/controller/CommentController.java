@@ -22,9 +22,13 @@ public class CommentController {
     }
 
 
-    @RequestMapping("/add")
+    @RequestMapping("/addComment")
     public SaResult addComment(@RequestParam Integer storyId, @RequestParam String content) {
         return commentService.addCommentToStory(storyId, content);
     }
 
+    @RequestMapping("/deleteOwnComment")
+    public SaResult deleteComment(@RequestParam Integer id) {
+        return commentService.OwnDeleteComment(id);
+    }
 }

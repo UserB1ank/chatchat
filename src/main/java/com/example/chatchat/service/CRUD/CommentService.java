@@ -8,6 +8,7 @@ import com.example.chatchat.data.neo4j.model.CommentNeo4j;
 import com.example.chatchat.data.neo4j.model.StoryNeo4j;
 import com.example.chatchat.data.neo4j.repository.CommentRepositoryNeo4j;
 import com.example.chatchat.data.neo4j.repository.StoryRepositoryNeo4j;
+import com.example.chatchat.data.neo4j.repository.UserRepositoryNeo4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -24,8 +25,17 @@ public class CommentService {
     private CommentRepositoryNeo4j commentRepositoryNeo4j;
     @Autowired
     private StoryRepositoryNeo4j storyRepositoryNeo4j;
+    @Autowired
+    private UserRepositoryNeo4j userRepositoryNeo4j;
 
 
+    /**
+     * 获取动态的全部回复
+     *
+     * @param index   页码
+     * @param storyId 动态id
+     * @return 回复列表
+     */
 
     public List<Comment> getAllStoryComment(Integer index, Integer storyId) {
         //先从neo4j中查找这个story的所有回复，然后排序，然后分页
@@ -60,6 +70,7 @@ public class CommentService {
         if (content.length() > 200) {
             return SaResult.error("评论内容过长");
         }
+        // TODO storyNeo4j实例的管理存在问题
         //评论发起人为当前用户
         String owner = StpUtil.getSession().get("account").toString();
         //生成mysql记录
@@ -73,8 +84,24 @@ public class CommentService {
         StoryNeo4j story = storyRepositoryNeo4j.findByid(storyId);
         story.addReply(commentNeo4j);
         //保存关系
-        storyRepositoryNeo4j.delete(story);
+//        storyRepositoryNeo4j.delete(story);
         storyRepositoryNeo4j.save(story);
+        return SaResult.ok();
+    }
+
+    public SaResult OwnDeleteComment(Integer id) {
+        String owner = StpUtil.getSession().get("account").toString();
+        if (userRepositoryNeo4j.findByAccount(owner).isStoryExist(id)) {
+            return SaResult.error("你不能删除别人的评论");
+        }
+        if (id.toString().isEmpty()) {
+            return SaResult.error("id不能为空");
+        }
+        if (!commentRepositoryNeo4j.existsByid(id) || !commentRepositoryMysql.existsByid(id)) {
+            return SaResult.error("评论不存在");
+        }
+        commentRepositoryMysql.deleteById(id);
+        commentRepositoryNeo4j.deleteById(id);
         return SaResult.ok();
     }
 }

@@ -1,5 +1,6 @@
 package com.example.chatchat.data.neo4j.model;
 
+import jakarta.persistence.Index;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.neo4j.core.schema.Relationship;
 

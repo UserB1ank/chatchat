@@ -8,6 +8,6 @@ import java.util.List;
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
     //主键是id
     Comment findByid(Integer id);
-    List<Comment> findByOwner(Integer owner);
 
+    boolean existsByid(Integer id);
 }

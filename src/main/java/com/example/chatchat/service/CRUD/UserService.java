@@ -104,7 +104,7 @@ public class UserService {
      * 遍历出帐号列表并返回
      * @return 帐号列表
      */
-    public List<String> getApply(Integer index) {//
+    public List<String> getApply(Integer index) {
         String account = StpUtil.getSession().get("account").toString();
         UserNeo4j user = userRepositoryNeo4j.findByAccount(account);
         List<UserNeo4j> applyList = new ArrayList<>(user.getApplyList());
