@@ -198,19 +198,20 @@ public class UserService {
     /**
      * 获取好友列表
      */
-    public Set<Friend> getFriends() {
+    public Set<Friend> getFriends(Integer index) {
         String account = StpUtil.getSession().get("account").toString();
         UserNeo4j user = userRepositoryNeo4j.findByAccount(account);
         if (user.isFriendListEmpty()) {
             return null;
         }
         Set<Friend> friends = new HashSet<>();
-        for (UserNeo4j friend : user.getFriends()) {
+        //用户列表预处理
+        List<UserNeo4j> friendList = new ArrayList<>(user.getFriends());
+        for (UserNeo4j friend : friendList.subList(index <= 0 ? 0 : --index, Math.min(index + 10, friendList.size()))) {//查询出10条记录
             User friendUser = userRepositoryMysql.findByAccount(friend.getAccount());
             Friend data = new Friend(friendUser.getAccount(), friendUser.getNickname(), friendUser.getAvatar(), friendUser.getMotto(), friendUser.getBirthday());
             friends.add(data);
         }
         return friends;
     }
-
 }

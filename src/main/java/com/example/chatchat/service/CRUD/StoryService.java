@@ -36,6 +36,7 @@ public class StoryService {
         return storyRepositoryMysql.findAllByOwner(account, pageRequest);
     }
 
+    //ToDo neo4j的关系"UserStory"添加似乎多余了
     public SaResult addStory(String content, String img) {
         try {
             //增加mysql记录与neo4j节点
@@ -95,11 +96,7 @@ public class StoryService {
         return storyList;
     }
 
-    public Set<Story> getLikesStory() {
-        Set<Story> storyList = new HashSet<>();
-        for (Story story : storyRepositoryMysql.findAll()) {
-            storyList.add(storyRepositoryMysql.getReferenceById(story.getId()));
-        }
-        return storyList;
+    public List<Story> getLikesStory() {
+        return null;
     }
 }

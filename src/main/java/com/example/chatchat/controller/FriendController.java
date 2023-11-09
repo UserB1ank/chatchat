@@ -52,7 +52,7 @@ public class FriendController {
     @RequestMapping("/friendList")
     //Todo 分页查询
     public Set<Friend> getFriends(@RequestParam(defaultValue = "0", value = "index") Integer index) {
-        return userService.getFriends();
+        return userService.getFriends(index);
     }
 
 }
