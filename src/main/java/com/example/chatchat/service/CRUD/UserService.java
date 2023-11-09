@@ -5,6 +5,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
 
 import com.example.chatchat.data.Friend;
+import com.example.chatchat.data.mysql.model.Story;
 import com.example.chatchat.data.mysql.model.User;
 import com.example.chatchat.data.mysql.repository.UserRepository;
 import com.example.chatchat.data.neo4j.model.UserNeo4j;
@@ -100,13 +101,18 @@ public class UserService {
 
     /**
      * 获取所有好友申请
-     *
-     * @return
+     * 遍历出帐号列表并返回
+     * @return 帐号列表
      */
-    public Set<UserNeo4j> getApply() {
+    public List<String> getApply(Integer index) {//
         String account = StpUtil.getSession().get("account").toString();
         UserNeo4j user = userRepositoryNeo4j.findByAccount(account);
-        return user.getApplyList();
+        List<UserNeo4j> applyList = new ArrayList<>(user.getApplyList());
+        List<String> accountList = new ArrayList<>();
+        for (UserNeo4j tmp : applyList.subList(index <= 0 ? 0 : --index, Math.min(index + 10, applyList.size()))) {
+            accountList.add(tmp.getAccount());
+        }
+        return accountList;
     }
 
     /**

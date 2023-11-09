@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -24,14 +25,8 @@ public class FriendController {
     }
 
     @RequestMapping("/applyList")
-    //Todo 分页查询
-    public Set<String> geApplyList() {
-        Set<UserNeo4j> applyList = userService.getApply();
-        Set<String> applyAccountList = new HashSet<>();
-        for (UserNeo4j user : applyList) {
-            applyAccountList.add(user.getAccount());
-        }
-        return applyAccountList;
+    public List<String> geApplyList(@RequestParam(defaultValue = "0", value = "index") Integer index) {
+        return userService.getApply(index);
     }
 
     @RequestMapping("/refuseApply")
@@ -50,7 +45,6 @@ public class FriendController {
     }
 
     @RequestMapping("/friendList")
-    //Todo 分页查询
     public Set<Friend> getFriends(@RequestParam(defaultValue = "0", value = "index") Integer index) {
         return userService.getFriends(index);
     }

@@ -10,6 +10,7 @@ import com.example.chatchat.data.neo4j.repository.StoryRepositoryNeo4j;
 import com.example.chatchat.data.neo4j.repository.UserRepositoryNeo4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,8 +31,6 @@ public class StoryService {
     // TODO 分页查询
     public Set<Story> getUserStories(Integer index) {
         String account = StpUtil.getSession().get("account").toString();
-//        PageRequest pageRequest = PageRequest.of(index < 0 ? 0 : --index, 10);
-
         PageRequest pageRequest = PageRequest.of(index <= 0 ? 0 : --index, 10);
         return storyRepositoryMysql.findAllByOwner(account, pageRequest);
     }
@@ -96,7 +95,26 @@ public class StoryService {
         return storyList;
     }
 
-    public List<Story> getLikesStory() {
-        return null;
+    public enum sortType {
+        likes,
+        createDate,
     }
+
+    /**
+     * 获取点赞最多的动态
+     *
+     * @param index 点赞数排序索引，默认为0，即从最近的点赞数开始排序
+     * @param type  点赞数排序类型，包括点赞数从高到低和点赞数从低到高
+     * @return 获取到的动态列表，按照点赞数从高到低排序
+     */
+    public List<Story> getLikesStory(Integer index, sortType type) {
+
+        PageRequest pageRequest = PageRequest.of(index <= 0 ? 0 : --index, 10);
+        //TODO 没想到'_'存在解析问题，先单独加个判断去解决
+        if (type.toString().equals("createDate")) {
+            return storyRepositoryMysql.findAllSortedBy(Sort.by(Sort.Direction.DESC, "create_date"), pageRequest);
+        }
+        return storyRepositoryMysql.findAllSortedBy(Sort.by(Sort.Direction.DESC, type.toString()), pageRequest);
+    }
+
 }

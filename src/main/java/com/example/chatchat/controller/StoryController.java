@@ -3,16 +3,11 @@ package com.example.chatchat.controller;
 import cn.dev33.satoken.util.SaResult;
 import com.example.chatchat.data.mysql.model.Story;
 import com.example.chatchat.service.CRUD.StoryService;
-import com.example.chatchat.service.CRUD.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.neo4j.core.schema.Relationship;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Set;
 
@@ -47,15 +42,10 @@ public class StoryController {
      * @List
      */
 
-    public enum sortType {
-        LIKES,
-        RECENT
-    }
-
     @RequestMapping("/getAllStory")
-    public List<Story> getAllStory(@RequestParam sortType type) {
+    public List<Story> getAllStory(@RequestParam(value = "index", defaultValue = "0") Integer index, @RequestParam(value = "type", defaultValue = "likes") StoryService.sortType type) {
         // 根据type参数获取对应的故事列表
-        return null;
+        return storyService.getLikesStory(index, type);
 
     }
 
