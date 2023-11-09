@@ -24,6 +24,7 @@ public class FriendController {
     }
 
     @RequestMapping("/applyList")
+    //Todo 分页查询
     public Set<String> geApplyList() {
         Set<UserNeo4j> applyList = userService.getApply();
         Set<String> applyAccountList = new HashSet<>();
@@ -49,7 +50,8 @@ public class FriendController {
     }
 
     @RequestMapping("/friendList")
-    public Set<Friend> getFriends() {
+    //Todo 分页查询
+    public Set<Friend> getFriends(@RequestParam(defaultValue = "0", value = "index") Integer index) {
         return userService.getFriends();
     }
 

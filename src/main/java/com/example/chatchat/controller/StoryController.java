@@ -24,7 +24,7 @@ public class StoryController {
     private StoryService storyService;
 
     @RequestMapping("/add")
-    public SaResult addStory(@RequestParam String content, @RequestParam String img) {
+    public SaResult addStory(@RequestParam String content, @RequestParam(value = "img", defaultValue = "") String img) {
         return storyService.addStory(content, img);
     }
 
@@ -34,8 +34,7 @@ public class StoryController {
     }
 
     @RequestMapping("/userStory")
-    //Todo 让前端传入一个index值
-    public Set<Story> getUserStories(@RequestParam Integer index) {
+    public Set<Story> getUserStories(@RequestParam(value = "index", defaultValue = "0") Integer index) {
         return storyService.getUserStories(index);
     }
 
@@ -50,7 +49,7 @@ public class StoryController {
 
     public enum sortType {
         LIKES,
-        DATE
+        RECENT
     }
 
     @RequestMapping("/getAllStory")
