@@ -46,7 +46,6 @@ public class StoryController {
     public List<Story> getAllStory(@RequestParam(value = "index", defaultValue = "0") Integer index, @RequestParam(value = "type", defaultValue = "likes") StoryService.sortType type) {
         // 根据type参数获取对应的故事列表
         return storyService.getLikesStory(index, type);
-
     }
 
 

@@ -12,9 +12,8 @@ public class CommentNeo4j {
     public CommentNeo4j() {
     }
 
-    public CommentNeo4j(Integer id, String owner) {
+    public CommentNeo4j(Integer id) {
         this.id = id;
-        this.owner = owner;
     }
 
     public Integer getId() {
@@ -25,17 +24,8 @@ public class CommentNeo4j {
         this.id = id;
     }
 
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
     @Id
     private Integer id;
-    private String owner;
 
     /**
      * 需要的关系

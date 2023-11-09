@@ -12,11 +12,10 @@ public class Comment {
     public Comment() {
     }
 
-    public Comment(int id, String owner, String content) {
+    public Comment( String owner, String content) {
         this.content = content;
         this.likes = 0;
         this.createDate = LocalDateTime.now();
-        this.id = id;
         this.owner = owner;
     }
 

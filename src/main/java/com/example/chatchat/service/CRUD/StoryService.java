@@ -108,7 +108,6 @@ public class StoryService {
      * @return 获取到的动态列表，按照点赞数从高到低排序
      */
     public List<Story> getLikesStory(Integer index, sortType type) {
-
         PageRequest pageRequest = PageRequest.of(index <= 0 ? 0 : --index, 10);
         return storyRepositoryMysql.findAllSortedBy(Sort.by(Sort.Direction.DESC, type.toString()), pageRequest);
     }
