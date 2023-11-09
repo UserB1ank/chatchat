@@ -6,6 +6,7 @@ import com.example.chatchat.data.mysql.model.Comment;
 import com.example.chatchat.data.mysql.repository.CommentRepository;
 import com.example.chatchat.data.neo4j.model.CommentNeo4j;
 import com.example.chatchat.data.neo4j.model.StoryNeo4j;
+import com.example.chatchat.data.neo4j.model.UserNeo4j;
 import com.example.chatchat.data.neo4j.repository.CommentRepositoryNeo4j;
 import com.example.chatchat.data.neo4j.repository.StoryRepositoryNeo4j;
 import com.example.chatchat.data.neo4j.repository.UserRepositoryNeo4j;
@@ -89,6 +90,11 @@ public class CommentService {
         return SaResult.ok();
     }
 
+    /**
+     * 删除评论
+     * @param id 评论id
+     * @return 删除结果
+     */
     public SaResult OwnDeleteComment(Integer id) {
         String owner = StpUtil.getSession().get("account").toString();
         if (userRepositoryNeo4j.findByAccount(owner).isStoryExist(id)) {
@@ -102,6 +108,25 @@ public class CommentService {
         }
         commentRepositoryMysql.deleteById(id);
         commentRepositoryNeo4j.deleteById(id);
+        return SaResult.ok();
+    }
+
+    public SaResult updateComment(Integer id, String content) {
+        if (id.toString().isEmpty()) {
+            return SaResult.error("id不能为空");
+        }
+        if (content.isEmpty()) {
+            return SaResult.error("评论内容不能为空");
+        }
+        if (content.length() > 200) {
+            return SaResult.error("评论内容过长");
+        }
+        if (!commentRepositoryMysql.findByid(id).getOwner().equals(StpUtil.getSession().get("account").toString())){
+            return SaResult.error("你不能修改别人的评论");
+        }
+        Comment comment = commentRepositoryMysql.findByid(id);
+        comment.setContent(content);
+        commentRepositoryMysql.save(comment);
         return SaResult.ok();
     }
 }

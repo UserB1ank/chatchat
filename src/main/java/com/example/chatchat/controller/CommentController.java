@@ -31,4 +31,9 @@ public class CommentController {
     public SaResult deleteComment(@RequestParam Integer id) {
         return commentService.OwnDeleteComment(id);
     }
+
+    @RequestMapping("/updateComment")
+    public SaResult updateComment(@RequestParam Integer id, @RequestParam String content) {
+        return commentService.updateComment(id, content);
+    }
 }

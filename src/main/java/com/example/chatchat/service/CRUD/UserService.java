@@ -116,28 +116,36 @@ public class UserService {
     }
 
     /**
-     * 申请
+     * 申请成为好友
      *
-     * @param friendAccount
-     * @return
+     * @param friendAccount 目标账户
+     * @return 返回申请结果
      */
     public SaResult applyToFriend(String friendAccount) {
+        // 判断目标账户是否存在
         if (!userRepositoryNeo4j.existsByAccount(friendAccount))
             return SaResult.error("申请目标不存在");
+        // 获取当前账户
         String account = StpUtil.getSession().get("account").toString();
+        // 根据账户查找用户信息
         UserNeo4j user = userRepositoryNeo4j.findByAccount(account);
         UserNeo4j friend = userRepositoryNeo4j.findByAccount(friendAccount);
 
+        // 判断是否申请了自己
         if (friend.getAccount().equals(account)) {
             return SaResult.error("不能申请自己为好友");
         }
+        // 判断是否已申请过该好友
         if (friend.isApplyExist(account)) {
             return SaResult.error("已申请过该好友");
         }
+        // 将当前用户添加到目标用户的申请列表中
         friend.addApply(user);
+        // 保存目标用户信息
         userRepositoryNeo4j.save(friend);
         return SaResult.ok();
     }
+
 
     /**
      * 拒绝好友申请
@@ -152,6 +160,7 @@ public class UserService {
         }
         user.removeApply(account);
         //需要删除持久化的实例后再添加，以达到修改的目的
+        // TODO 这里可能存在node重复的问题
         userRepositoryNeo4j.delete(user);
         userRepositoryNeo4j.save(user);
         return SaResult.ok();
