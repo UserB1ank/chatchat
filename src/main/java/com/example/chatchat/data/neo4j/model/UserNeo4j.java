@@ -109,6 +109,43 @@ public class UserNeo4j {
         likeStories.add(story);
     }
 
+
+    /**
+     * 判断是否已存在指定id的故事点赞
+     * @param id 要判断的id
+     * @return 如果存在该故事点赞则返回true，否则返回false
+     */
+    public boolean isLikeStoryExist(Integer id) {
+        if (likeStories == null) {
+            likeStories = new HashSet<>();
+        }
+        for (StoryNeo4j storyNeo4j : likeStories) {
+            if (storyNeo4j.getId().equals(id)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 删除指定id的故事点赞
+     * @param id 要删除的story的id
+     * @return 如果成功删除点赞则返回true，否则返回false
+     */
+    public boolean deleteLikeStory(Integer id) {
+        if (likeStories == null) {
+            likeStories = new HashSet<>();
+        }
+        for (StoryNeo4j storyNeo4j : likeStories) {
+            if (storyNeo4j.getId().equals(id)) {
+                likeStories.remove(storyNeo4j);
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     @Relationship(type = "LIKE_COMMENT")
     private Set<CommentNeo4j> likeComments;
 
