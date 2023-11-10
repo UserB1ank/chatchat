@@ -2,6 +2,7 @@ package com.example.chatchat.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
+import com.example.chatchat.data.Friend;
 import com.example.chatchat.data.mysql.model.User;
 import com.example.chatchat.data.neo4j.model.UserNeo4j;
 import com.example.chatchat.service.CRUD.UserService;
@@ -43,10 +44,10 @@ public class UserController {
     /**
      * 用户注册
      *
-     * @param username       用户名
-     * @param password       密码
-     * @param nickname       昵称
-     * @param birthday       出生日期
+     * @param username 用户名
+     * @param password 密码
+     * @param nickname 昵称
+     * @param birthday 出生日期
      * @return 用户注册结果
      */
     @RequestMapping("/register")
@@ -57,8 +58,8 @@ public class UserController {
     /**
      * 修改密码
      *
-     * @param oldPassword    旧密码
-     * @param newPassword    新密码
+     * @param oldPassword 旧密码
+     * @param newPassword 新密码
      * @return 修改密码结果
      */
     @RequestMapping("/changePassword")
@@ -69,10 +70,10 @@ public class UserController {
     /**
      * 更新用户信息
      *
-     * @param nickname       昵称
-     * @param motto          标语
-     * @param avatar         头像
-     * @param birthday       出生日期
+     * @param nickname 昵称
+     * @param motto    标语
+     * @param avatar   头像
+     * @param birthday 出生日期
      * @return 更新用户信息结果
      */
     @RequestMapping("/updateInfo")
@@ -81,13 +82,24 @@ public class UserController {
     }
 
     /**
-     * 获取用户信息
+     * 获取当前用户信息
      *
      * @return 用户信息
      */
     @RequestMapping("/getUserInfo")
     public User getUserInfo() {
         return userService.getUserInfo();
+    }
+
+    /**
+     * 获取指定用户的信息
+     *
+     * @param account 帐号
+     * @return 用户信息
+     */
+    @RequestMapping("/getSingleUserInfo")
+    public Friend getSingleUserInfo(@RequestParam String account) {
+        return userService.getSingleUserInfo(account);
     }
 
     /**

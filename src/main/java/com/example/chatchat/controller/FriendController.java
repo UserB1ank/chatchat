@@ -87,4 +87,6 @@ public class FriendController {
     public Set<Friend> getFriends(@RequestParam(defaultValue = "0", value = "index") Integer index) {
         return userService.getFriends(index);
     }
+
+
 }

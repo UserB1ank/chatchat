@@ -10,6 +10,7 @@ import com.example.chatchat.data.mysql.model.User;
 import com.example.chatchat.data.mysql.repository.UserRepository;
 import com.example.chatchat.data.neo4j.model.UserNeo4j;
 import com.example.chatchat.data.neo4j.repository.UserRepositoryNeo4j;
+import com.fasterxml.jackson.datatype.jsr310.deser.InstantDeserializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -102,6 +103,7 @@ public class UserService {
     /**
      * 获取所有好友申请
      * 遍历出帐号列表并返回
+     *
      * @return 帐号列表
      */
     public List<String> getApply(Integer index) {
@@ -228,5 +230,13 @@ public class UserService {
             friends.add(data);
         }
         return friends;
+    }
+
+    /**
+     * 获取单个用户的非敏感信息
+     */
+    public Friend getSingleUserInfo(String account) {
+        User user = userRepositoryMysql.findByAccount(account);
+        return new Friend(user.getAccount(), user.getNickname(), user.getAvatar(), user.getMotto(), user.getBirthday());
     }
 }
