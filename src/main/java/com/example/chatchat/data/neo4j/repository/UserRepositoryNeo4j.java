@@ -6,7 +6,6 @@ import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 
 public interface UserRepositoryNeo4j extends Neo4jRepository<UserNeo4j, String> {
-    // TODO 重写save为merge
     UserNeo4j findByAccount(String username);
     boolean existsByAccount(String username);
 }

@@ -56,6 +56,7 @@ public class UserService {
         if (userRepositoryMysql.existsByAccount(username) && userRepositoryNeo4j.existsByAccount(username)) {
             return SaResult.error("账号已存在");
         }
+        System.out.println("123");
         User newBee = new User(username, password, nickname, birthday);
         userRepositoryMysql.save(newBee);
         UserNeo4j newBeeNeo4j = new UserNeo4j(username);
@@ -238,5 +239,18 @@ public class UserService {
     public Friend getSingleUserInfo(String account) {
         User user = userRepositoryMysql.findByAccount(account);
         return new Friend(user.getAccount(), user.getNickname(), user.getAvatar(), user.getMotto(), user.getBirthday());
+    }
+
+    /**
+     * 登出
+     */
+    public SaResult logout(){
+        try{
+            StpUtil.logout();
+            return SaResult.ok();
+        }catch (Exception e){
+            System.out.println(e.getStackTrace());
+            return SaResult.error();
+        }
     }
 }

@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO 所有service的书写
 @Service
 public class CommentService {
     @Autowired
@@ -71,7 +70,6 @@ public class CommentService {
         if (content.length() > 200) {
             return SaResult.error("评论内容过长");
         }
-        // TODO storyNeo4j实例的管理存在问题
         //评论发起人为当前用户
         String owner = StpUtil.getSession().get("account").toString();
         //生成mysql记录

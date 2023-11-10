@@ -113,4 +113,9 @@ public class UserController {
         return currentTime.toString();
     }
 
+    @RequestMapping("/logout")
+    public SaResult logout() {
+        return userService.logout();
+    }
+
 }

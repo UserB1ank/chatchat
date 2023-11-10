@@ -61,7 +61,7 @@ public class StoryController {
      * 获取全部故事
      *
      * @param index  故事的索引
-     * @param type   故事的排序类型
+     * @param type   故事的排序类型 likes,createDate 按like的数量或创建日期排序
      * @return 故事集合
      */
     @RequestMapping("/getAllStory")

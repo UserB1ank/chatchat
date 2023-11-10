@@ -5,5 +5,4 @@ import org.springframework.data.neo4j.repository.Neo4jRepository;
 
 public interface CommentRepositoryNeo4j extends Neo4jRepository<CommentNeo4j,Integer> {
     boolean existsByid(Integer id);
-    //TODO 重写save为merge
 }

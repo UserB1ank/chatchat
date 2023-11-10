@@ -62,4 +62,5 @@ public class CommentController {
     public SaResult updateComment(@RequestParam Integer id, @RequestParam String content) {
         return commentService.updateComment(id, content);
     }
+
 }
