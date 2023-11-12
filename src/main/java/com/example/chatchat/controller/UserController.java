@@ -6,6 +6,7 @@ import com.example.chatchat.data.Friend;
 import com.example.chatchat.data.mysql.model.User;
 import com.example.chatchat.data.neo4j.model.UserNeo4j;
 import com.example.chatchat.service.CRUD.UserService;
+import com.example.chatchat.service.image.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -108,14 +109,25 @@ public class UserController {
      * @return 当前时间
      */
     @RequestMapping("/test")
-    public String test() {
-        LocalDateTime currentTime = LocalDateTime.now();
-        return currentTime.toString();
+    public SaResult test() {
+        ImageService imageService = new ImageService();
+        return imageService.SaveImage("test");
     }
 
+    /**
+     * 登出
+     *
+     * @return 登出结果
+     */
     @RequestMapping("/logout")
     public SaResult logout() {
         return userService.logout();
+    }
+
+    @RequestMapping("/forgetPassword")
+    public SaResult forgetPassword(@RequestParam String account) {
+//        return userService.forgetPassword(account);
+        return null;
     }
 
 }

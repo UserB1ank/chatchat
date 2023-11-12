@@ -244,13 +244,46 @@ public class UserService {
     /**
      * 登出
      */
-    public SaResult logout(){
-        try{
+    public SaResult logout() {
+        try {
             StpUtil.logout();
             return SaResult.ok();
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getStackTrace());
             return SaResult.error();
         }
+    }
+
+    //TODO 忘记密码
+    /**
+     * 忘记密码
+     * 第一步验证账号和生日
+     */
+    public SaResult forgotPasswordFirst(String account, String birthday) {
+        User user = userRepositoryMysql.findByAccount(account);
+        if (user == null) {
+            return SaResult.error("该用户不存在");
+        }
+        if (!user.getBirthday().toString().equals(birthday)) {
+            return SaResult.error("生日不匹配");
+        }
+        return SaResult.ok();
+    }
+
+    /**
+     * 忘记密码
+     * 第二步修改密码
+     */
+    public SaResult forgotPasswordSecond(String account, String birthday, String password) {
+        User user = userRepositoryMysql.findByAccount(account);
+        if(user == null){
+            return SaResult.error("该用户不存在");
+        }
+        if(user.getBirthday().toString().equals(birthday)){
+            return SaResult.error("请误修改他人密码");
+        }
+        user.setPassword(password);
+        userRepositoryMysql.save(user);
+        return SaResult.ok();
     }
 }
