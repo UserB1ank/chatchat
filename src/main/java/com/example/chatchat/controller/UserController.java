@@ -111,7 +111,7 @@ public class UserController {
     @RequestMapping("/test")
     public SaResult test() {
         ImageService imageService = new ImageService();
-        return imageService.SaveImage("test");
+        return null;
     }
 
     /**

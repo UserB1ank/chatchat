@@ -42,7 +42,7 @@ public class ImageService {
     }
 
 
-    public SaResult SaveImage(MultipartFile file, String path) {
+    private SaResult SaveImage(MultipartFile file, String path) {
         String fileName = file.getOriginalFilename();
         if (Objects.isNull(fileName)) {
             return SaResult.error("图片为空");
@@ -69,7 +69,12 @@ public class ImageService {
 
         return SaResult.ok(path);
     }
-    //TODO 头像上传
-    //TODO 动态图片上传
+
+    //TODO 头像上传 单张图片检测
+    public SaResult SaveAvatar(MultipartFile file) {
+        return SaveImage(file, "avatar");
+    }
+    //TODO 动态图片上传 多张图片处理
+//    public SaResult
 
 }
