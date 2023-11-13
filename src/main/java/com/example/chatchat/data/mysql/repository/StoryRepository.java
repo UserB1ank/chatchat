@@ -14,5 +14,8 @@ import java.util.Set;
 public interface StoryRepository extends JpaRepository<Story, Integer> {
     //主键是id
     Set<Story> findAllByOwner(String owner, PageRequest pageable);
+
     List<Story> findAllSortedBy(Sort by, PageRequest pageRequest);
+
+    Story findByid(Integer id);
 }

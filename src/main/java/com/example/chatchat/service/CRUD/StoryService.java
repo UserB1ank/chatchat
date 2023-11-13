@@ -24,8 +24,6 @@ public class StoryService {
     private StoryRepositoryNeo4j storyRepositoryNeo4j;
     @Autowired
     private UserRepositoryNeo4j userRepositoryNeo4j;
-
-
     public Set<Story_safe> getUserStories(Integer index) {
         String account = StpUtil.getSession().get("account").toString();
         PageRequest pageRequest = PageRequest.of(index <= 0 ? 0 : --index, 10);
@@ -33,7 +31,7 @@ public class StoryService {
         Set<Story_safe> storySafes = new HashSet<>();
         for (Story story : stories) {
             String[] tmp = story.getImg().split(",");
-            Story_safe story_safe = new Story_safe(story.getId(), story.getContent(), Arrays.asList(tmp), story.getCreateDate(), story.getOwner());
+            Story_safe story_safe = new Story_safe(story.getId(), story.getContent(), Arrays.asList(tmp), story.getCreateDate(), story.getOwner(),story.getLikes());
             storySafes.add(story_safe);
         }
         return storySafes;
@@ -101,7 +99,7 @@ public class StoryService {
         Set<Story_safe> storySafes = new HashSet<>();
         for (Story story : storyList) {
             String[] tmp = story.getImg().split(",");
-            Story_safe story_safe = new Story_safe(story.getId(), story.getContent(), Arrays.asList(tmp), story.getCreateDate(), story.getOwner());
+            Story_safe story_safe = new Story_safe(story.getId(), story.getContent(), Arrays.asList(tmp), story.getCreateDate(), story.getOwner(),story.getLikes());
             storySafes.add(story_safe);
         }
         return storySafes;
@@ -127,7 +125,7 @@ public class StoryService {
         List<Story_safe> storySafes = new ArrayList<>();
         for (Story story : stories) {
             String[] tmp = story.getImg().split(",");
-            Story_safe story_safe = new Story_safe(story.getId(), story.getContent(), Arrays.asList(tmp), story.getCreateDate(), story.getOwner());
+            Story_safe story_safe = new Story_safe(story.getId(), story.getContent(), Arrays.asList(tmp), story.getCreateDate(), story.getOwner(),story.getLikes());
             storySafes.add(story_safe);
         }
         return storySafes;
@@ -139,7 +137,7 @@ public class StoryService {
         for (StoryNeo4j story1 : user.getStories()) {
             Story story = storyRepositoryMysql.getReferenceById(story1.getId());
             String[] tmp = story.getImg().split(",");
-            Story_safe story_safe = new Story_safe(story.getId(), story.getContent(), Arrays.asList(tmp), story.getCreateDate(), story.getOwner());
+            Story_safe story_safe = new Story_safe(story.getId(), story.getContent(), Arrays.asList(tmp), story.getCreateDate(), story.getOwner(),story.getLikes());
             storySafes.add(story_safe);
         }
         return storySafes;

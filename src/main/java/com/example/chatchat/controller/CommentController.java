@@ -62,5 +62,7 @@ public class CommentController {
     public SaResult updateComment(@RequestParam Integer id, @RequestParam String content) {
         return commentService.updateComment(id, content);
     }
-
+    //todo 为评论添加评论
+    //todo 点赞机制，如何判断已经点赞了ps：neo4j
+    
 }

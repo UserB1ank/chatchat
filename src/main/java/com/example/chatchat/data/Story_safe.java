@@ -9,11 +9,11 @@ import java.util.List;
 
 public class Story_safe {
     //TODO 构造方法修改
-    public Story_safe(Integer id, String content, List<String> img, LocalDateTime create_date, String owner) {
+    public Story_safe(Integer id, String content, List<String> img, LocalDateTime create_date, String owner, Integer likes) {
         this.id = id;
         this.content = content;
         this.img = img;
-        this.likes = 0;
+        this.likes = likes;
         this.createDate = create_date;
         this.owner = owner;
     }

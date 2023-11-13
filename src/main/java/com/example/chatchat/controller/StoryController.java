@@ -2,6 +2,7 @@ package com.example.chatchat.controller;
 
 import cn.dev33.satoken.util.SaResult;
 import com.example.chatchat.data.Story_safe;
+import com.example.chatchat.service.CRUD.LikeService;
 import com.example.chatchat.service.CRUD.StoryService;
 import com.example.chatchat.service.image.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,8 @@ public class StoryController {
     private StoryService storyService;
     @Autowired
     private ImageService imageService;
+    @Autowired
+    private LikeService likeService;
 
     /**
      * 添加故事
@@ -103,4 +106,10 @@ public class StoryController {
     public List<Story_safe> getSingleStory(@RequestParam String account) {
         return storyService.getUserStory(account);
     }
+
+    @RequestMapping("/likeStory")
+    public SaResult likeStory(@RequestParam Integer id) {
+        return likeService.addLikeForStory(id);
+    }
+
 }
