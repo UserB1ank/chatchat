@@ -3,6 +3,7 @@ package com.example.chatchat.controller;
 import cn.dev33.satoken.util.SaResult;
 import com.example.chatchat.data.mysql.model.Comment;
 import com.example.chatchat.service.CRUD.CommentService;
+import com.example.chatchat.service.CRUD.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,10 +20,13 @@ public class CommentController {
     // TODO 点赞机制
     @Autowired
     private CommentService commentService;
+    @Autowired
+    private LikeService likeService;
 
     /**
      * 注释：获取所有故事的评论
-     * @param index 分页索引
+     *
+     * @param index   分页索引
      * @param storyId 故事ID
      * @return 所有故事的评论列表
      */
@@ -33,6 +37,7 @@ public class CommentController {
 
     /**
      * 注释：添加评论到故事
+     *
      * @param storyId 故事ID
      * @param content 评论内容
      * @return 添加评论的结果
@@ -44,6 +49,7 @@ public class CommentController {
 
     /**
      * 注释：删除自己的评论
+     *
      * @param id 评论ID
      * @return 删除评论的结果
      */
@@ -54,7 +60,8 @@ public class CommentController {
 
     /**
      * 注释：更新评论内容
-     * @param id 评论ID
+     *
+     * @param id      评论ID
      * @param content 新的评论内容
      * @return 更新评论的结果
      */
@@ -62,7 +69,14 @@ public class CommentController {
     public SaResult updateComment(@RequestParam Integer id, @RequestParam String content) {
         return commentService.updateComment(id, content);
     }
+
+    @RequestMapping("/likeComment")
+    public SaResult likeComment(@RequestParam Integer id) {
+        return likeService.addLikeForComment(id);
+    }
+
+
     //todo 为评论添加评论
-    //todo 点赞机制，如何判断已经点赞了ps：neo4j
-    
+
+
 }

@@ -112,6 +112,7 @@ public class UserNeo4j {
 
     /**
      * 判断是否已存在指定id的故事点赞
+     *
      * @param id 要判断的id
      * @return 如果存在该故事点赞则返回true，否则返回false
      */
@@ -129,6 +130,7 @@ public class UserNeo4j {
 
     /**
      * 删除指定id的故事点赞
+     *
      * @param id 要删除的story的id
      * @return 如果成功删除点赞则返回true，否则返回false
      */
@@ -161,6 +163,31 @@ public class UserNeo4j {
         likeComments.add(comment);
     }
 
+    public boolean isLikeCommentExist(Integer id) {
+        if (likeComments == null) {
+            likeComments = new HashSet<>();
+        }
+        for (CommentNeo4j commentNeo4j : likeComments) {
+            if (commentNeo4j.getId().equals(id)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean deleteLikeComment(Integer id) {
+        if (likeComments == null) {
+            likeComments = new HashSet<>();
+        }
+        for (CommentNeo4j commentNeo4j : likeComments) {
+            if (commentNeo4j.getId().equals(id)) {
+                return likeComments.remove(commentNeo4j);
+            }
+        }
+        return false;
+    }
+
+    //----------------------------------------
     @Relationship(type = "APPLY_FROM")
     private Set<UserNeo4j> applies;
 
@@ -268,6 +295,7 @@ public class UserNeo4j {
 
     /**
      * 删除好友
+     *
      * @param friend
      */
     public void removeFriend(UserNeo4j friend) {
