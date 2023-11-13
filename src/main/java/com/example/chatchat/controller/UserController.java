@@ -8,10 +8,8 @@ import com.example.chatchat.data.neo4j.model.UserNeo4j;
 import com.example.chatchat.service.CRUD.UserService;
 import com.example.chatchat.service.image.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -29,6 +27,8 @@ import java.util.Set;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private ImageService imageService;
 
     /**
      * 用户登录
@@ -78,7 +78,15 @@ public class UserController {
      * @return 更新用户信息结果
      */
     @RequestMapping("/updateInfo")
-    public SaResult updateInfo(@RequestParam String nickname, @RequestParam String motto, @RequestParam String avatar, @RequestParam String birthday) {
+    public SaResult updateInfo(@RequestParam String nickname, @RequestParam String motto, @RequestParam MultipartFile avatar, @RequestParam String birthday) {
+        //TODO 装配图片上传
+//        try {
+//            SaResult result=imageService.SaveAvatar(avatar);
+//            result.getMsg();
+//        }catch (Exception e){
+//            System.out.println(e.getStackTrace());
+//            return SaResult.error("头像上传失败");
+//        }
         return userService.updateInfo(nickname, motto, avatar, birthday);
     }
 

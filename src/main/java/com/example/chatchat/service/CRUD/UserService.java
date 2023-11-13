@@ -10,13 +10,16 @@ import com.example.chatchat.data.mysql.model.User;
 import com.example.chatchat.data.mysql.repository.UserRepository;
 import com.example.chatchat.data.neo4j.model.UserNeo4j;
 import com.example.chatchat.data.neo4j.repository.UserRepositoryNeo4j;
+import com.example.chatchat.service.image.ImageService;
 import com.fasterxml.jackson.datatype.jsr310.deser.InstantDeserializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.swing.plaf.PanelUI;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -27,7 +30,8 @@ public class UserService {
     @Autowired
     public UserRepositoryNeo4j userRepositoryNeo4j;
 
-    private String account;
+    @Autowired
+    public ImageService imageService;
 
     public UserService() {
     }
@@ -79,13 +83,23 @@ public class UserService {
      * 修改用户信息
      */
     public SaResult updateInfo(String nickname, String motto,
-                               String avatar, String birthday) {
+                               MultipartFile avatar, String birthday) {
+        String avatarPath = "";
         String account = StpUtil.getSession().get("account").toString();
         User user = userRepositoryMysql.findByAccount(account);
         // Todo 这里有很大的优化空间
         user.setNickname(nickname.isEmpty() ? user.getNickname() : nickname);
         user.setMotto(motto.isEmpty() ? user.getMotto() : motto);
-        user.setAvatar(avatar.isEmpty() ? user.getAvatar() : avatar);
+        //图片
+        if (avatar != null) {
+            try {
+                avatarPath = imageService.SaveAvatar(avatar).getMsg();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return SaResult.error("图片上传失败");
+            }
+        }
+        user.setAvatar(avatarPath.isEmpty() ? user.getAvatar() : avatarPath);
         user.setBirthday(birthday.isEmpty() ? user.getBirthday() : LocalDate.parse(birthday));
         userRepositoryMysql.save(user);
         return SaResult.ok();
@@ -255,6 +269,7 @@ public class UserService {
     }
 
     //TODO 忘记密码
+
     /**
      * 忘记密码
      * 第一步验证账号和生日
@@ -276,10 +291,10 @@ public class UserService {
      */
     public SaResult forgotPasswordSecond(String account, String birthday, String password) {
         User user = userRepositoryMysql.findByAccount(account);
-        if(user == null){
+        if (user == null) {
             return SaResult.error("该用户不存在");
         }
-        if(user.getBirthday().toString().equals(birthday)){
+        if (user.getBirthday().toString().equals(birthday)) {
             return SaResult.error("请误修改他人密码");
         }
         user.setPassword(password);
