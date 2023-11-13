@@ -1,7 +1,7 @@
 package com.example.chatchat.controller;
 
 import cn.dev33.satoken.util.SaResult;
-import com.example.chatchat.data.mysql.model.Story;
+import com.example.chatchat.data.Story_safe;
 import com.example.chatchat.service.CRUD.StoryService;
 import com.example.chatchat.service.image.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +64,7 @@ public class StoryController {
      * @return 用户故事集合
      */
     @RequestMapping("/userStory")
-    public Set<Story> getUserStories(@RequestParam(value = "index", defaultValue = "0") Integer index) {
+    public Set<Story_safe> getUserStories(@RequestParam(value = "index", defaultValue = "0") Integer index) {
         return storyService.getUserStories(index);
     }
 
@@ -78,9 +78,29 @@ public class StoryController {
      * @return 故事集合
      */
     @RequestMapping("/getAllStory")
-    public List<Story> getAllStory(@RequestParam(value = "index", defaultValue = "0") Integer index, @RequestParam(value = "type", defaultValue = "likes") StoryService.sortType type) {
+    public List<Story_safe> getAllStory(@RequestParam(value = "index", defaultValue = "0") Integer index, @RequestParam(value = "type", defaultValue = "likes") StoryService.sortType type) {
         // 根据type参数获取对应的故事列表
         return storyService.getLikesStory(index, type);
     }
 
+    /**
+     * 获取好友故事
+     *
+     * @return 好友故事集合
+     */
+    @RequestMapping("/getFriendStory")
+    public Set<Story_safe> getFriendStories() {
+        return storyService.getFriendStories();
+    }
+
+    /**
+     * 获取指定用户的故事
+     *
+     * @param account 用户的账号
+     * @return 指定用户的故事集合
+     */
+    @RequestMapping("/getUserStory")
+    public List<Story_safe> getSingleStory(@RequestParam String account) {
+        return storyService.getUserStory(account);
+    }
 }

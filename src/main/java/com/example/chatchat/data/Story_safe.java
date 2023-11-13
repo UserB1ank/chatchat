@@ -1,23 +1,24 @@
-package com.example.chatchat.data.mysql.model;
+package com.example.chatchat.data;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.*;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-@Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class Story {
-
-    public Story(String content, String img, String owner) {
+public class Story_safe {
+    //TODO 构造方法修改
+    public Story_safe(Integer id, String content, List<String> img, LocalDateTime create_date, String owner) {
+        this.id = id;
         this.content = content;
         this.img = img;
         this.likes = 0;
-        this.createDate = LocalDateTime.now();
+        this.createDate = create_date;
         this.owner = owner;
     }
 
-    public Story() {
+    public Story_safe() {
     }
 
     public String getContent() {
@@ -36,11 +37,11 @@ public class Story {
         this.id = id;
     }
 
-    public String getImg() {
+    public List<String> getImg() {
         return img;
     }
 
-    public void setImg(String img) {
+    public void setImg(List<String> img) {
         this.img = img;
     }
 
@@ -72,7 +73,7 @@ public class Story {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String img;
+    private List<String> img;
     private int likes;
     private LocalDateTime createDate;
     private String owner;

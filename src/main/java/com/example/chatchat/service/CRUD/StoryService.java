@@ -2,6 +2,7 @@ package com.example.chatchat.service.CRUD;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SaResult;
+import com.example.chatchat.data.Story_safe;
 import com.example.chatchat.data.mysql.model.Story;
 import com.example.chatchat.data.mysql.repository.StoryRepository;
 import com.example.chatchat.data.neo4j.model.StoryNeo4j;
@@ -13,10 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class StoryService {
@@ -28,11 +26,17 @@ public class StoryService {
     private UserRepositoryNeo4j userRepositoryNeo4j;
 
 
-    // TODO 分页查询
-    public Set<Story> getUserStories(Integer index) {
+    public Set<Story_safe> getUserStories(Integer index) {
         String account = StpUtil.getSession().get("account").toString();
         PageRequest pageRequest = PageRequest.of(index <= 0 ? 0 : --index, 10);
-        return storyRepositoryMysql.findAllByOwner(account, pageRequest);
+        Set<Story> stories = storyRepositoryMysql.findAllByOwner(account, pageRequest);
+        Set<Story_safe> storySafes = new HashSet<>();
+        for (Story story : stories) {
+            String[] tmp = story.getImg().split(",");
+            Story_safe story_safe = new Story_safe(story.getId(), story.getContent(), Arrays.asList(tmp), story.getCreateDate(), story.getOwner());
+            storySafes.add(story_safe);
+        }
+        return storySafes;
     }
 
     public SaResult addStory(String content, List<String> img) {
@@ -80,15 +84,12 @@ public class StoryService {
                 return SaResult.error("删除失败" + "1");
             }
         } catch (Exception e) {
-            // TODO 删除失败，回滚数据，删除node，删除mysql记录
             e.printStackTrace();
             return SaResult.error("删除失败");
         }
     }
 
-    // Todo 几种不同的获取动态的方式
-    // Todo 动态获取后，由谁发布的动态，这个信息如何获取并传递到前端
-    public Set<Story> getFriendStories() {
+    public Set<Story_safe> getFriendStories() {
         UserNeo4j owner = userRepositoryNeo4j.findByAccount(StpUtil.getSession().get("account").toString());
         Set<Story> storyList = new HashSet<>();
         for (UserNeo4j friend : owner.getFriends()) {
@@ -97,7 +98,14 @@ public class StoryService {
                 storyList.add(story);
             }
         }
-        return storyList;
+        Set<Story_safe> storySafes = new HashSet<>();
+        for (Story story : storyList) {
+            String[] tmp = story.getImg().split(",");
+            Story_safe story_safe = new Story_safe(story.getId(), story.getContent(), Arrays.asList(tmp), story.getCreateDate(), story.getOwner());
+            storySafes.add(story_safe);
+        }
+        return storySafes;
+//        return storyList;
     }
 
     public enum sortType {
@@ -112,9 +120,28 @@ public class StoryService {
      * @param type  点赞数排序类型，包括点赞数从高到低和点赞数从低到高
      * @return 获取到的动态列表，按照点赞数从高到低排序
      */
-    public List<Story> getLikesStory(Integer index, sortType type) {
+    public List<Story_safe> getLikesStory(Integer index, sortType type) {
+
         PageRequest pageRequest = PageRequest.of(index <= 0 ? 0 : --index, 10);
-        return storyRepositoryMysql.findAllSortedBy(Sort.by(Sort.Direction.DESC, type.toString()), pageRequest);
+        List<Story> stories = storyRepositoryMysql.findAllSortedBy(Sort.by(Sort.Direction.DESC, "likes"), pageRequest);
+        List<Story_safe> storySafes = new ArrayList<>();
+        for (Story story : stories) {
+            String[] tmp = story.getImg().split(",");
+            Story_safe story_safe = new Story_safe(story.getId(), story.getContent(), Arrays.asList(tmp), story.getCreateDate(), story.getOwner());
+            storySafes.add(story_safe);
+        }
+        return storySafes;
     }
 
+    public List<Story_safe> getUserStory(String account) {
+        UserNeo4j user = userRepositoryNeo4j.findByAccount(account);
+        List<Story_safe> storySafes = new ArrayList<>();
+        for (StoryNeo4j story1 : user.getStories()) {
+            Story story = storyRepositoryMysql.getReferenceById(story1.getId());
+            String[] tmp = story.getImg().split(",");
+            Story_safe story_safe = new Story_safe(story.getId(), story.getContent(), Arrays.asList(tmp), story.getCreateDate(), story.getOwner());
+            storySafes.add(story_safe);
+        }
+        return storySafes;
+    }
 }
