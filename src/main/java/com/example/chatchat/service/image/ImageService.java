@@ -44,9 +44,9 @@ public class ImageService {
         return sb.toString();
     }
 
-
-    private SaResult SaveImage(MultipartFile file, String path) {
-        //TODO 依据文件类型去保存
+    //TODO 头像上传 单张图片检测
+    public SaResult SaveAvatar(MultipartFile file) {
+        String path = "avatars";
         String fileName = file.getOriginalFilename();
         if (Objects.isNull(fileName)) {
             return SaResult.error("图片为空");
@@ -74,11 +74,6 @@ public class ImageService {
         String fileUrl = path + "/" + finalFileName;
         // TODO 返回相对路径
         return SaResult.ok(fileUrl);
-    }
-
-    //TODO 头像上传 单张图片检测
-    public SaResult SaveAvatar(MultipartFile file) {
-        return SaveImage(file, "avatars");
     }
 
     //TODO 动态图片上传 多张图片处理
