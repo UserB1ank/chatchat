@@ -78,7 +78,8 @@ public class UserController {
      * @return 更新用户信息结果
      */
     @RequestMapping("/updateInfo")
-    public SaResult updateInfo(@RequestParam String nickname, @RequestParam String motto, @RequestParam MultipartFile avatar, @RequestParam String birthday) {
+    //TODO 如果未上传图片
+    public SaResult updateInfo(@RequestParam(defaultValue = "") String nickname, @RequestParam(defaultValue = "") String motto, @RequestPart(required = false) MultipartFile avatar, @RequestParam(defaultValue = "") String birthday) {
         //TODO 装配图片上传
 //        try {
 //            SaResult result=imageService.SaveAvatar(avatar);

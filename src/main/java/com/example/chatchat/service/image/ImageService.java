@@ -15,6 +15,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.Timestamp;
 import java.util.Objects;
 import java.util.Set;
 
@@ -45,6 +46,7 @@ public class ImageService {
 
 
     private SaResult SaveImage(MultipartFile file, String path) {
+        //TODO 依据文件类型去保存
         String fileName = file.getOriginalFilename();
         if (Objects.isNull(fileName)) {
             return SaResult.error("图片为空");
@@ -62,20 +64,21 @@ public class ImageService {
         {
             SaResult.error("图片大小超过5M");
         }
+        String finalFileName = generateHash(fileName) + fileName.substring(fileName.lastIndexOf('.'));
         String finalPath = staticPath + "/" + path + "/";
         try {
-            FileCopyUtils.copy(file.getInputStream(), Files.newOutputStream(Paths.get(finalPath, generateHash(fileName)), StandardOpenOption.CREATE_NEW));
+            FileCopyUtils.copy(file.getInputStream(), Files.newOutputStream(Paths.get(finalPath, finalFileName), StandardOpenOption.CREATE_NEW));
         } catch (IOException e) {
             System.out.println(e.getStackTrace());
         }
-        String fileUrl = path + "/" + generateHash(fileName);
+        String fileUrl = path + "/" + finalFileName;
         // TODO 返回相对路径
         return SaResult.ok(fileUrl);
     }
 
     //TODO 头像上传 单张图片检测
     public SaResult SaveAvatar(MultipartFile file) {
-        return SaveImage(file, "avatar");
+        return SaveImage(file, "avatars");
     }
 
     //TODO 动态图片上传 多张图片处理
