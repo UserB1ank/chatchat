@@ -3,10 +3,13 @@ package com.example.chatchat.controller;
 import cn.dev33.satoken.util.SaResult;
 import com.example.chatchat.data.mysql.model.Story;
 import com.example.chatchat.service.CRUD.StoryService;
+import com.example.chatchat.service.image.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Set;
@@ -20,6 +23,8 @@ public class StoryController {
 
     @Autowired
     private StoryService storyService;
+    @Autowired
+    private ImageService imageService;
 
     /**
      * 添加故事
@@ -29,8 +34,16 @@ public class StoryController {
      * @return 故事添加结果
      */
     @RequestMapping("/add")
-    public SaResult addStory(@RequestParam String content, @RequestParam(value = "img", defaultValue = "") String img) {
-        return storyService.addStory(content, img);
+    //TODO 多图上传，返回路径获取
+    public SaResult addStory(@RequestParam String content, @RequestPart(required = false) MultipartFile[] img) {
+        List<String> imgs = null;
+        if (img != null && img.length > 0) {
+            System.out.println("haha");
+            imgs = (List<String>) imageService.SaveStoryImages(img).getData();
+            System.out.println("bad");
+        }
+        return storyService.addStory(content, imgs);
+//        return null;
     }
 
     /**
@@ -60,8 +73,8 @@ public class StoryController {
     /**
      * 获取全部故事
      *
-     * @param index  故事的索引
-     * @param type   故事的排序类型 likes,createDate 按like的数量或创建日期排序
+     * @param index 故事的索引
+     * @param type  故事的排序类型 likes,createDate 按like的数量或创建日期排序
      * @return 故事集合
      */
     @RequestMapping("/getAllStory")

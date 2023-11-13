@@ -35,10 +35,17 @@ public class StoryService {
         return storyRepositoryMysql.findAllByOwner(account, pageRequest);
     }
 
-    public SaResult addStory(String content, String img) {
+    public SaResult addStory(String content, List<String> img) {
         try {
+            StringBuilder img_data = new StringBuilder();
+            //处理图片
+            if (!img.isEmpty()) {
+                for (String uri : img) {
+                    img_data.append(uri).append(",");
+                }
+            }
             //增加mysql记录与neo4j节点
-            Story newBee = new Story(content, img, StpUtil.getSession().get("account").toString());
+            Story newBee = new Story(content, img_data.toString(), StpUtil.getSession().get("account").toString());
             storyRepositoryMysql.save(newBee);
             Integer id = newBee.getId();
             StoryNeo4j newBeeNeo4j = new StoryNeo4j(id);

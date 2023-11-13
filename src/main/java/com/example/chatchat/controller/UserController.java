@@ -78,16 +78,7 @@ public class UserController {
      * @return 更新用户信息结果
      */
     @RequestMapping("/updateInfo")
-    //TODO 如果未上传图片
     public SaResult updateInfo(@RequestParam(defaultValue = "") String nickname, @RequestParam(defaultValue = "") String motto, @RequestPart(required = false) MultipartFile avatar, @RequestParam(defaultValue = "") String birthday) {
-        //TODO 装配图片上传
-//        try {
-//            SaResult result=imageService.SaveAvatar(avatar);
-//            result.getMsg();
-//        }catch (Exception e){
-//            System.out.println(e.getStackTrace());
-//            return SaResult.error("头像上传失败");
-//        }
         return userService.updateInfo(nickname, motto, avatar, birthday);
     }
 

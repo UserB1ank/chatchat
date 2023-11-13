@@ -16,6 +16,9 @@ import java.nio.file.StandardOpenOption;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.Timestamp;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -78,14 +81,38 @@ public class ImageService {
 
     //TODO 动态图片上传 多张图片处理
     public SaResult SaveStoryImages(MultipartFile[] files) {
-        try {
-            for (MultipartFile file : files) {
-                SaveImage(file, "images");
+        String path = "images";
+        List<String> paths = new ArrayList<>();
+        for (MultipartFile file : files) {
+            String fileName = file.getOriginalFilename();
+            if (Objects.isNull(fileName)) {
+                return SaResult.error("图片为空");
             }
-            return SaResult.ok("图片上传成功");
-        } catch (Exception e) {
-            return SaResult.error("图片上传失败");
+            int index = fileName.lastIndexOf('.');
+            String suffix = null;
+            if (index == -1 || (suffix = fileName.substring(index + 1).toLowerCase()).isEmpty()) {
+                return SaResult.error("文件后缀不能为空");
+            }
+            if (!whiteList.contains(suffix.toLowerCase())) {
+                return SaResult.error("非法的图片格式");
+            }
+
+            if (file.getSize() > 5 * 1024 * 1024)//大于5M
+            {
+                SaResult.error("图片大小超过5M");
+            }
+            String finalFileName = generateHash(fileName + LocalDateTime.now()) + fileName.substring(fileName.lastIndexOf('.'));
+            String finalPath = staticPath + "/" + path + "/";
+            try {
+                FileCopyUtils.copy(file.getInputStream(), Files.newOutputStream(Paths.get(finalPath, finalFileName), StandardOpenOption.CREATE_NEW));
+            } catch (IOException e) {
+                System.out.println(e.getStackTrace());
+            }
+            String fileUrl = path + "/" + finalFileName;
+            // TODO 返回相对路径
+            paths.add(fileUrl);
         }
+        return SaResult.data(paths);
     }
 
 }
