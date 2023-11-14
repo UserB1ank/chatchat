@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-//TODO 图片保存问题
 @Service
 public class ImageService {
     private static final String staticPath = System.getProperty("user.dir") + "/src/main/resources/static/";
@@ -46,8 +45,6 @@ public class ImageService {
         }
         return sb.toString();
     }
-
-    //TODO 头像上传 单张图片检测
     public SaResult SaveAvatar(MultipartFile file) {
         String path = "avatars";
         String fileName = file.getOriginalFilename();
@@ -75,11 +72,9 @@ public class ImageService {
             System.out.println(e.getStackTrace());
         }
         String fileUrl = path + "/" + finalFileName;
-        // TODO 返回相对路径
         return SaResult.ok(fileUrl);
     }
 
-    //TODO 动态图片上传 多张图片处理
     public SaResult SaveStoryImages(MultipartFile[] files) {
         String path = "images";
         List<String> paths = new ArrayList<>();
@@ -109,7 +104,6 @@ public class ImageService {
                 System.out.println(e.getStackTrace());
             }
             String fileUrl = path + "/" + finalFileName;
-            // TODO 返回相对路径
             paths.add(fileUrl);
         }
         return SaResult.data(paths);

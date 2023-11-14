@@ -37,7 +37,6 @@ public class StoryController {
      * @return 故事添加结果
      */
     @RequestMapping("/add")
-    //TODO 多图上传，返回路径获取
     public SaResult addStory(@RequestParam String content, @RequestPart(required = false) MultipartFile[] img) {
         List<String> imgs = null;
         if (img != null && img.length > 0) {
@@ -71,7 +70,6 @@ public class StoryController {
         return storyService.getUserStories(index);
     }
 
-    // TODO 动态的排序，热度，时间
 
     /**
      * 获取全部故事

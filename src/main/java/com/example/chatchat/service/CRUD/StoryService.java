@@ -58,7 +58,6 @@ public class StoryService {
             userRepositoryNeo4j.save(owner);
             return SaResult.ok("添加成功");
         } catch (Exception e) {
-            // TODO 添加失败，回滚数据，删除node，删除mysql记录
             e.printStackTrace();
             return SaResult.error("添加失败");
         }

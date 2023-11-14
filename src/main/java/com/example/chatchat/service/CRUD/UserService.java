@@ -87,7 +87,6 @@ public class UserService {
         String avatarPath = "";
         String account = StpUtil.getSession().get("account").toString();
         User user = userRepositoryMysql.findByAccount(account);
-        // Todo 这里有很大的优化空间
         user.setNickname(nickname.isEmpty() ? user.getNickname() : nickname);
         user.setMotto(motto.isEmpty() ? user.getMotto() : motto);
         //图片
@@ -177,7 +176,6 @@ public class UserService {
         }
         user.removeApply(account);
         //需要删除持久化的实例后再添加，以达到修改的目的
-        // TODO 这里可能存在node重复的问题
         userRepositoryNeo4j.delete(user);
         userRepositoryNeo4j.save(user);
         return SaResult.ok();
@@ -198,7 +196,9 @@ public class UserService {
         UserNeo4j friend = userRepositoryNeo4j.findByAccount(account);
         //删除请求
         user.removeApply(account);
+        friend.removeApply(user.getAccount());
         userRepositoryNeo4j.delete(user);
+        System.out.println("hahanihao");
         //相互添加好友
         user.addFriend(friend);
         friend.addFriend(user);
