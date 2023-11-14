@@ -124,10 +124,10 @@ public class UserController {
         return userService.logout();
     }
 
-    @RequestMapping("/forgetPassword")
-    public SaResult forgetPassword(@RequestParam String account) {
-//        return userService.forgetPassword(account);
-        return null;
-    }
+//    @RequestMapping("/forgetPassword")
+//    public SaResult forgetPassword(@RequestParam String account) {
+////        return userService.forgetPassword(account);
+//        return null;
+//    }
 
 }

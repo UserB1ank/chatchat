@@ -12,6 +12,7 @@ import javax.print.Doc;
 // TODO 动态推送
 // TODO WebSocket聊天室
 // TODO 聊天室聊天记录存储
+// TODO 删除评论/故事时同步删除图片
 @SpringBootApplication
 public class ChatChatApplication {
 

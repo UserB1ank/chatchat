@@ -17,7 +17,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/comment")
 public class CommentController {
-    // TODO 点赞机制
     @Autowired
     private CommentService commentService;
     @Autowired
@@ -70,13 +69,20 @@ public class CommentController {
         return commentService.updateComment(id, content);
     }
 
+    /**
+     * 注释：点赞评论
+     *
+     * @param id 评论ID
+     * @return 点赞评论的结果
+     */
     @RequestMapping("/likeComment")
     public SaResult likeComment(@RequestParam Integer id) {
         return likeService.addLikeForComment(id);
     }
 
-
-    //todo 为评论添加评论
-
-
+    //TODO 评论的评论
+//    @RequestMapping("/addCommentToComment")
+//    public SaResult addCommentComment(@RequestParam Integer id, @RequestParam String content) {
+//        return null;
+//    }
 }

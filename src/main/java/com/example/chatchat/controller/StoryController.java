@@ -105,6 +105,12 @@ public class StoryController {
         return storyService.getUserStory(account);
     }
 
+    /**
+     * 点赞故事
+     *
+     * @param id 故事ID
+     * @return 点赞结果
+     */
     @RequestMapping("/likeStory")
     public SaResult likeStory(@RequestParam Integer id) {
         return likeService.addLikeForStory(id);
